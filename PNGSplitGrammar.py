@@ -6,7 +6,7 @@ class PNGScope(Scope):
         super(PNGScope, self).__init__(box, **kwargs)
         self.image = image
         if not hasattr(image,"zBuffer"):
-            self.image.zBuffer = [[float('inf') for y in xrange(image.height)] for x in xrange(image.width)]
+            self.image.zBuffer = [[float('inf') for y in range(image.height)] for x in range(image.width)]
     def make_child(self, box, **kwargs):
         return PNGScope(self.image, box, **kwargs)
         

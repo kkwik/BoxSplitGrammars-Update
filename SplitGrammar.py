@@ -1,4 +1,4 @@
-from __future__ import print_function
+
 from GrammarBox import BoundingBox
 from GrammarStorage import RULES, CONTEXT, MATERIALS
 import random
@@ -31,7 +31,7 @@ class Constraint:
     def __repr__(self):
         return str(self.a) + " " + self.op + " " + str(self.b)
         
-    def __nonzero__(self):
+    def __bool__(self):
         return self.evaluate(CONTEXT[-1])
       
 try:
@@ -179,7 +179,7 @@ class Scope(object):
         if small:
             result = {"scope": str(list(self.box.origin)) + " to " + str(list(self.box.maximum)) + " (size " + str(list(self.box.size)) + ")", "status": self.status}
             if self.children:
-                result["children"] = list(map(lambda c: c.to_json(True), self.children))
+                result["children"] = list([c.to_json(True) for c in self.children])
             return result
         result = {}
         result["origin"] = list(self.box.origin)
@@ -192,7 +192,7 @@ class Scope(object):
         result["source"] = self.source
         result["number"] = self.number
         if self.children:
-            result["children"] = list(map(lambda c: c.to_json(), self.children))
+            result["children"] = list([c.to_json() for c in self.children])
         return result
         
     def leave(self):
@@ -371,7 +371,7 @@ class Scope(object):
     def make_child(self, box, **kwargs):
         return Scope(box, parent=self, **kwargs)
         
-    def __nonzero__(self):
+    def __bool__(self):
         if self.entered is None:
             self.entered = CONTEXT[-1]
             self.enter()
@@ -436,7 +436,7 @@ def clearrules(mod):
     
 def rule(probability=1, constraint=None):
     def rule_inner(f):
-        key = f.func_code.co_filename + ":" + f.func_name
+        key = f.__code__.co_filename + ":" + f.__name__
         if key not in RULES:
             RULES[key] = []
         RULES[key].append((probability,Constraint.TRUE if (constraint is None) else constraint,f))
@@ -448,9 +448,9 @@ def rule(probability=1, constraint=None):
                 ctx = CONTEXT[-1]
             chosenf = None 
             all_options = RULES[key]
-            options = list(filter(lambda o: o[1].evaluate(ctx), all_options))
+            options = list([o for o in all_options if o[1].evaluate(ctx)])
             if not options:
-                options = list(filter(lambda o: o[1].op == "else", all_options))
+                options = list([o for o in all_options if o[1].op == "else"])
             if not options:
                 print("No applicable rule found for", key, "on frame", ctx)
                 void()

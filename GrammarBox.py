@@ -118,9 +118,9 @@ class BoundingBox(object):
     def positions(self):
         """iterate through all of the positions within this selection box"""
         return itertools.product(
-            xrange(self.minx, self.maxx),
-            xrange(self.miny, self.maxy),
-            xrange(self.minz, self.maxz)
+            range(self.minx, self.maxx),
+            range(self.miny, self.maxy),
+            range(self.minz, self.maxz)
         )
 
     def intersect(self, box):
