@@ -9,6 +9,7 @@ class MCScope(Scope):
     def __init__(self, level, box, **kwargs):
         super(MCScope, self).__init__(box, **kwargs)
         self.level = level
+        self.platform_version = (level.level_wrapper.platform, level.level_wrapper.version)
 
     def make_child(self, box, **kwargs):
         return MCScope(self.level, box, **kwargs)
@@ -17,7 +18,7 @@ class MCScope(Scope):
         for (x,y,z) in self.box.positions:
             if material == 0:
                 material = Block.from_string_blockstate('minecraft:air')
-            self.level.set_version_block(x, y, z, 'minecraft:overworld', ("java", (1, 19, 3)), material) # set block
+            self.level.set_version_block(x, y, z, 'minecraft:overworld', self.platform_version, material) # set block
 
 
 def start_symbol(box: SelectionGroup, level: "BaseLevel"):
