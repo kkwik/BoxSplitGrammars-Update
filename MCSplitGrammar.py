@@ -17,8 +17,6 @@ class MCScope(Scope):
         
     def set_material(self, material):
         for (x,y,z) in self.box.positions:
-            if material == 0:
-                material = Block.from_string_blockstate('minecraft:air')
             self.level.set_version_block(x, y, z, self.dimension, self.platform_version, material) # set block
 
 
@@ -27,7 +25,8 @@ def start_symbol(box: SelectionGroup, level: "BaseLevel", dimension):
     return SplitGrammar.start_symbol(scope)
 
     
-SplitGrammar.register_material(-1,Block.from_string_blockstate("minecraft:stone"))
+SplitGrammar.register_material(-1 ,Block.from_string_blockstate("minecraft:stone"))
+SplitGrammar.register_material(0, Block.from_string_blockstate("minecraft:air"))
 SplitGrammar.register_material(1, Block.from_string_blockstate("minecraft:cobblestone"))
 SplitGrammar.register_material(2, Block.from_string_blockstate("minecraft:dirt"))
 SplitGrammar.register_material(3, Block.from_string_blockstate("minecraft:granite"))

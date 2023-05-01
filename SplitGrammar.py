@@ -555,7 +555,7 @@ def fill(material=-1):
     
 @consumer
 def void():
-    CONTEXT[-1].fill(0)
+    CONTEXT[-1].fill(MATERIALS.get(0,0))
     
 @consumer
 def skip():
