@@ -6,23 +6,24 @@ from amulet.api.selection import SelectionGroup
 
 
 class MCScope(Scope):
-    def __init__(self, level, box, **kwargs):
+    def __init__(self, level, box, dimension, **kwargs):
         super(MCScope, self).__init__(box, **kwargs)
         self.level = level
+        self.dimension = dimension
         self.platform_version = (level.level_wrapper.platform, level.level_wrapper.version)
 
     def make_child(self, box, **kwargs):
-        return MCScope(self.level, box, **kwargs)
+        return MCScope(self.level, box, self.dimension, **kwargs)
         
     def set_material(self, material):
         for (x,y,z) in self.box.positions:
             if material == 0:
                 material = Block.from_string_blockstate('minecraft:air')
-            self.level.set_version_block(x, y, z, 'minecraft:overworld', self.platform_version, material) # set block
+            self.level.set_version_block(x, y, z, self.dimension, self.platform_version, material) # set block
 
 
-def start_symbol(box: SelectionGroup, level: "BaseLevel"):
-    scope = MCScope(level=level, box=box, source="Root")
+def start_symbol(box: SelectionGroup, level: "BaseLevel", dimension):
+    scope = MCScope(level=level, box=box, dimension=dimension, source="Root")
     return SplitGrammar.start_symbol(scope)
 
     

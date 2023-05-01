@@ -156,7 +156,7 @@ def performOperation(
     if len(selection_group.selection_boxes) == 1:
         selection_box: SelectionBox = selection_group.selection_boxes[0]
         bounding_box: BoundingBox = BoundingBox(selection_box.min, selection_box.shape) # Convert amulet Selection box into GrammarBox BoundingBox
-        sc = start_symbol(bounding_box, world)
+        sc = start_symbol(bounding_box, world, dimension)
         castle()
         f = open("parsetree.json", "w")
         json.dump(sc.to_json(), f, indent=4)
