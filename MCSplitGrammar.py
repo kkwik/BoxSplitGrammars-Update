@@ -17,6 +17,8 @@ class MCScope(Scope):
         
     def set_material(self, material):
         for (x,y,z) in self.box.positions:
+            if isinstance(material, str):
+                material = Block.from_string_blockstate(material)
             self.level.set_version_block(x, y, z, self.dimension, self.platform_version, material) # set block
 
 
